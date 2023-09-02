@@ -2,10 +2,10 @@ package com.dudhatra.hclassignment.commands;
 
 import com.dudhatra.hclassignment.external.library.Algo;
 
-public class CancelTradesCommand implements SignalCommand {
+public class ReverseCommand implements SignalCommand {
 
     @Override
     public void execute(Algo algo) {
-        algo.cancelTrades();
+        algo.reverse();
     }
 }

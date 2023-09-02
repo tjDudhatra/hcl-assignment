@@ -1,4 +1,4 @@
-package com.dudhatra.hclassignment.service;
+package com.dudhatra.hclassignment.commands;
 
 import com.dudhatra.hclassignment.external.library.Algo;
 

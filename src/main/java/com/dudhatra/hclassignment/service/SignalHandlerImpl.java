@@ -1,56 +1,44 @@
 package com.dudhatra.hclassignment.service;
 
+import com.dudhatra.hclassignment.commands.SignalCommand;
+import com.dudhatra.hclassignment.config.SignalSpecificationConfig;
 import com.dudhatra.hclassignment.external.library.Algo;
 import com.dudhatra.hclassignment.external.upstream.SignalHandler;
+import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 /**
- * This is a trading service responsible for processing signals.
- * This service implements {@link SignalHandler} and processes signals.
+ * This is a service, which implements {@link SignalHandler} interface.
+ * {@link SignalHandlerImpl#handleSignal(int)} method is responsible for processing signals based
+ * on their predefined implementation.
  */
-public class TradingService implements SignalHandler {
+@Service
+public class SignalHandlerImpl implements SignalHandler {
 
-    private Map<Integer, Consumer<Algo>> signalHandlers;
+    private final Map<Integer, List<SignalCommand>> signalSpecifications;
 
-    public TradingService() {
-        this.initialiseSignalHandlers();
+    public SignalHandlerImpl() {
+        this.signalSpecifications = SignalSpecificationConfig.loadSignalSpecifications();
     }
 
-    private void initialiseSignalHandlers() {
-        signalHandlers = new HashMap<>();
-        signalHandlers.put(1, this::handleSignal1);
-        signalHandlers.put(2, this::handleSignal2);
-        signalHandlers.put(3, this::handleSignal3);
-    }
-
+    @Override
     public void handleSignal(int signal) {
         Algo algo = new Algo();
-        Consumer<Algo> signalHandler = signalHandlers.getOrDefault(signal, this::defaultHandler);
-        signalHandler.accept(algo);
+        List<SignalCommand> commands = signalSpecifications.get(signal);
+        if (commands != null) {
+            executeCommands(algo, commands);
+        } else {
+            defaultHandler(algo);
+        }
         algo.doAlgo();
     }
 
-    private void handleSignal1(Algo algo) {
-        algo.setUp();
-        algo.setAlgoParam(1, 60);
-        algo.performCalc();
-        algo.submitToMarket();
-    }
-
-    private void handleSignal2(Algo algo) {
-        algo.reverse();
-        algo.setAlgoParam(1, 80);
-        algo.submitToMarket();
-    }
-
-    private void handleSignal3(Algo algo) {
-        algo.setAlgoParam(1, 90);
-        algo.setAlgoParam(2, 15);
-        algo.performCalc();
-        algo.submitToMarket();
+    private void executeCommands(Algo algo, List<SignalCommand> commands) {
+        for (SignalCommand command : commands) {
+            command.execute(algo);
+        }
     }
 
     private void defaultHandler(Algo algo) {

@@ -1,7 +1,8 @@
 package com.dudhatra.hclassignment.external.library;
 
 /**
- * This is implemented in a third-party library and we cannot change it
+ * This class is a representation of a library which will be given by Algo team.
+ * We will not be able to change this code.
  */
 public class Algo {
     public void doAlgo() {
