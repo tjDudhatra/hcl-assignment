@@ -18,14 +18,21 @@ import java.util.Map;
 public class SignalHandlerImpl implements SignalHandler {
 
     private final Map<Integer, List<SignalCommand>> signalSpecifications;
+    private final AlgoInstanceGenerationService algoInstanceGenerationService;
 
-    public SignalHandlerImpl() {
+    public SignalHandlerImpl(AlgoInstanceGenerationService algoInstanceGenerationService) {
         this.signalSpecifications = SignalSpecificationConfig.loadSignalSpecifications();
+        this.algoInstanceGenerationService = algoInstanceGenerationService;
     }
 
     @Override
     public void handleSignal(int signal) {
-        Algo algo = new Algo();
+        Algo algo = algoInstanceGenerationService.generateNewAlgoInstance();
+
+        if (algo == null) {
+            throw new RuntimeException("Can not connect with Algo library.");
+        }
+
         List<SignalCommand> commands = signalSpecifications.get(signal);
         if (commands != null) {
             executeCommands(algo, commands);
