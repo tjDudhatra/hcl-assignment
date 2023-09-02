@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * This is a service, which implements {@link SignalHandler} interface.
  * {@link SignalHandlerImpl#handleSignal(int)} method is responsible for processing signals based
- * on their predefined implementation.
+ * on their predefined configuration.
  */
 @Service
 public class SignalHandlerImpl implements SignalHandler {

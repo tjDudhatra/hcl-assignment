@@ -7,8 +7,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The {@code SignalSpecificationConfig} class provides a configuration mechanism for mapping
+ * trading signals to lists of {@link SignalCommand} instances, defining the actions to be taken
+ * when each signal is received.
+ * <p>
+ * It contains methods to load predefined signal specifications and associated commands for
+ * signals 1, 2, and 3. When adding new signal specifications, a new method should be added
+ * to configure the commands for the new signal.
+ *
+ * @see SignalCommand
+ */
 public class SignalSpecificationConfig {
 
+    /**
+     * Loads and returns a mapping of trading signals to lists of associated
+     * {@code SignalCommand} instances.
+     *
+     * @return A {@code Map<Integer, List<SignalCommand>>} representing signal specifications.
+     */
     public static Map<Integer, List<SignalCommand>> loadSignalSpecifications() {
         Map<Integer, List<SignalCommand>> signalSpecifications = new HashMap<>();
 
@@ -42,7 +59,6 @@ public class SignalSpecificationConfig {
                 new SubmitToMarketCommand());
     }
 
-    // When adding new signal specifications, please add a new method just like it is done for
-    // other signals, as seen above.
+    // When adding new signal specifications, please add a new method following the same pattern.
 
 }
